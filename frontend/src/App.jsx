@@ -4,7 +4,7 @@ import Navbar from "./components/Navbar";
 import ShuttlePage from "./pages/shuttle";
 import DriversPage from "./pages/drivers";
 import UsersPage from "./pages/user";
-import CarsPage from "./pages/cars";
+import VehiclesPage from "./pages/vehicles";
 import Dashboard from "./pages/dashboard";
 import BookingsPage from "./pages/bookings";
 import AlertsPage from "./pages/alerts";
@@ -62,7 +62,7 @@ function App() {
         <Route
           path="/cars"
           element={
-            isAuthenticated ? <CarsPage /> : <Navigate to="/" />
+            isAuthenticated ? <VehiclesPage /> : <Navigate to="/" />
           }
         />
         <Route

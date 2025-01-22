@@ -146,7 +146,7 @@ const TableCell = styled.td`
   padding: 10px;
   border: 1px solid #ddd;
   font-size:13px;
-`;
+`; 
 
 const ActionMenu = styled.div`
   display: flex;

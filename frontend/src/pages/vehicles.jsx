@@ -1,6 +1,7 @@
 import { useState } from "react";
 import React from "react";
 import styled from "styled-components";
+import AddVehicle from "./addVehicle";
 
 // Styled Components
 const Container = styled.div`
@@ -158,7 +159,9 @@ const ActionMenu = styled.div`
 
 const VehiclesPage = () => {
   const [activeTab, setActiveTab] = useState("Active");
+  const [showAddVehicle, setShowAddVehicle] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+
 
   // Vehicle data with workingCondition
   const vehicles = [
@@ -204,7 +207,7 @@ const VehiclesPage = () => {
           </Select>
         </Manage>
         <ActionButtons>
-          <Button primary>Add Vehicle</Button>
+          <Button primary onClick={() => setShowAddVehicle(true)}>Add Vehicle</Button>
           <Button primary>Bulk Upload</Button>
         </ActionButtons>
       </Header>
@@ -266,6 +269,8 @@ const VehiclesPage = () => {
           ))}
         </tbody>
       </Table>
+      {/* Add Driver Modal */}
+      {showAddVehicle && <AddVehicle onClose={() => setShowAddVehicle(false)} />}
     </Container>
   );
 };
