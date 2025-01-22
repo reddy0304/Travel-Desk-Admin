@@ -2,6 +2,7 @@ import { useState } from "react";
 import React from "react";
 import styled from "styled-components";
 import AddDriver from "./adddriver";
+import AddDriverBulkUpload  from "./addDriverBulkupload";
 
 // Styled Components
 const Container = styled.div`
@@ -28,7 +29,7 @@ const Manage = styled.div`
 display:flex;
 flex-direction: row;
 align-items: center;
-gap: 10px;
+gap: 9px;
 justify-content: space-between;
 `;
 
@@ -53,8 +54,8 @@ const ActionButtons = styled.div`
 `;
 
 const Button = styled.button`
-  background-color: ${(props) => (props.primary ? "#007bff" : "#f5f5f5")};
-  color: ${(props) => (props.primary ? "#fff" : "#333")};
+  background-color: ${(props) => (props.$primary ? "#007bff" : "#f5f5f5")};
+  color: ${(props) => (props.$primary ? "#fff" : "#333")};
   margin-top: 10px;
   padding: 9px 20px;
   border: none;
@@ -99,15 +100,15 @@ const Tab = styled.button`
   align-items:center;
   justify-content:center;
   padding: 8px 8px;
-  background-color: ${(props) => (props.active ? "#007bff" : "#f5f5f5")};
-  color: ${(props) => (props.active ? "#fff" : "#333")};
+  background-color: ${(props) => (props.$active ? "#007bff" : "#f5f5f5")};
+  color: ${(props) => (props.$active ? "#fff" : "#333")};
   border: none;
   border-radius: 4px;
   cursor: pointer;
   width:118px;
 
   &:hover {
-    background-color: ${(props) => (props.active ? "#0056b3" : "#ddd")};
+    background-color: ${(props) => (props.$active ? "#0056b3" : "#ddd")};
   }
 `;
 
@@ -159,6 +160,7 @@ const ActionMenu = styled.div`
 
 const DriversPage = () => {
     const [activeTab, setActiveTab] = useState("Active");
+    const [showBulkUpload, setShowBulkUpload] = useState(false);
     const [showAddDriver, setShowAddDriver] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const drivers = [
@@ -350,20 +352,21 @@ const DriversPage = () => {
         </Select>
         </Manage>
         <ActionButtons>
-        <Button primary onClick={() => setShowAddDriver(true)}> {/* Open modal */}
+        <Button $primary onClick={() => setShowAddDriver(true)}> {/* Open modal */}
             Add Driver
         </Button>
-          <Button primary>Bulk Upload</Button>
+          <Button $primary onClick={() => setShowBulkUpload(true)}>Bulk Upload</Button> {/* Switch to bulkupload page */}
         </ActionButtons>
       </Header>
 
       {/* Tabs Section */}
-      <ToggleContainer>
+      {!showBulkUpload &&
+        <ToggleContainer>
         <ToggleBox>
-        <Tab active={activeTab === "Active"} onClick={() => setActiveTab("Active")}>
+        <Tab $active={activeTab === "Active"} onClick={() => setActiveTab("Active")}>
           Active Driver
         </Tab>
-        <Tab active={activeTab === "Inactive"} onClick={() => setActiveTab("Inactive")}>
+        <Tab $active={activeTab === "Inactive"} onClick={() => setActiveTab("Inactive")}>
           Inactive Driver
         </Tab>
         </ToggleBox>
@@ -373,10 +376,12 @@ const DriversPage = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-      </ToggleContainer>
-
+        </ToggleContainer>
+      }
+      
       {/* Drivers Table */}
-      <Table>
+      {!showBulkUpload &&
+        <Table>
         <thead>
           <tr>
             <TableHeader>Sl. No.</TableHeader>
@@ -410,6 +415,9 @@ const DriversPage = () => {
           ))}
         </tbody>
       </Table>
+      }
+      {/* Add driverBulkupload modal*/}
+      {showBulkUpload && <AddDriverBulkUpload setShowBulkUpload={setShowBulkUpload}/> }
       {/* Add Driver Modal */}
       {showAddDriver && <AddDriver onClose={() => setShowAddDriver(false)} />}
     </Container>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import React from "react";
 import styled from "styled-components";
 import AddVehicle from "./addVehicle";
+import AddVehicleBulkUpload from "./AddVehicleBulkUpload";
 
 // Styled Components
 const Container = styled.div`
@@ -28,7 +29,7 @@ const Manage = styled.div`
 display:flex;
 flex-direction: row;
 align-items: center;
-gap: 10px;
+gap: 9px;
 justify-content: space-between;
 `;
 
@@ -50,11 +51,12 @@ const ActionButtons = styled.div`
   margin-bottom: 5px;
   width:70%;
   justify-content: end;
+  margin-right: 10px;
 `;
 
 const Button = styled.button`
-  background-color: ${(props) => (props.primary ? "#007bff" : "#f5f5f5")};
-  color: ${(props) => (props.primary ? "#fff" : "#333")};
+  background-color: ${(props) => (props.$primary ? "#007bff" : "#f5f5f5")};
+  color: ${(props) => (props.$primary ? "#fff" : "#333")};
   margin-top: 10px;
   padding: 9px 20px;
   border: none;
@@ -99,15 +101,15 @@ const Tab = styled.button`
   align-items:center;
   justify-content:center;
   padding: 8px 8px;
-  background-color: ${(props) => (props.active ? "#007bff" : "#f5f5f5")};
-  color: ${(props) => (props.active ? "#fff" : "#333")};
+  background-color: ${(props) => (props.$active ? "#007bff" : "#f5f5f5")};
+  color: ${(props) => (props.$active ? "#fff" : "#333")};
   border: none;
   border-radius: 4px;
   cursor: pointer;
   width:118px;
 
   &:hover {
-    background-color: ${(props) => (props.active ? "#0056b3" : "#ddd")};
+    background-color: ${(props) => (props.$active ? "#0056b3" : "#ddd")};
   }
 `;
 
@@ -159,6 +161,7 @@ const ActionMenu = styled.div`
 
 const VehiclesPage = () => {
   const [activeTab, setActiveTab] = useState("Active");
+  const [showBulkUpload, setShowBulkUpload] = useState(false);
   const [showAddVehicle, setShowAddVehicle] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -207,31 +210,34 @@ const VehiclesPage = () => {
           </Select>
         </Manage>
         <ActionButtons>
-          <Button primary onClick={() => setShowAddVehicle(true)}>Add Vehicle</Button>
-          <Button primary>Bulk Upload</Button>
+          <Button $primary onClick={() => setShowAddVehicle(true)}>Add Vehicle</Button>
+          <Button $primary onClick={() => setShowBulkUpload(true)}>Bulk Upload</Button>
         </ActionButtons>
       </Header>
 
-      {/* Tabs and Search Section */}
-      <ToggleContainer>
-        <ToggleBox>
-          <Tab active={activeTab === "Active"} onClick={() => setActiveTab("Active")}>
-            Active Vehicles
-          </Tab>
-          <Tab active={activeTab === "Inactive"} onClick={() => setActiveTab("Inactive")}>
-            Inactive Vehicles
-          </Tab>
-        </ToggleBox>
-        <SearchInput
-          type="text"
-          placeholder="Search Vehicle by Number"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </ToggleContainer>
+       {/* Tabs Section */}
+       {!showBulkUpload &&
+         <ToggleContainer>
+         <ToggleBox>
+           <Tab $active={activeTab === "Active"} onClick={() => setActiveTab("Active")}>
+             Active Vehicles
+           </Tab>
+           <Tab $active={activeTab === "Inactive"} onClick={() => setActiveTab("Inactive")}>
+             Inactive Vehicles
+           </Tab>
+         </ToggleBox>
+         <SearchInput
+           type="text"
+           placeholder="Search Vehicle by Number"
+           value={searchQuery}
+           onChange={(e) => setSearchQuery(e.target.value)}
+         />
+         </ToggleContainer>
+       }
 
       {/* Vehicles Table */}
-      <Table>
+      {!showBulkUpload &&
+        <Table>
         <thead>
           <tr>
             <TableHeader>Sl. No.</TableHeader>
@@ -268,7 +274,12 @@ const VehiclesPage = () => {
             </TableRow>
           ))}
         </tbody>
-      </Table>
+        </Table>
+      }
+
+      {/* Add vehicle Bulkupload modal*/}
+      {showBulkUpload && <AddVehicleBulkUpload  setShowBulkUpload={setShowBulkUpload}/> }
+
       {/* Add Driver Modal */}
       {showAddVehicle && <AddVehicle onClose={() => setShowAddVehicle(false)} />}
     </Container>
